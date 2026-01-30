@@ -1,5 +1,3 @@
-.PHONY: test test-unit test-functional test-cov logs build up down install restart clean composer-update composer-install
-
 SERVICE=holded-service
 
 ssh:

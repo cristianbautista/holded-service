@@ -25,7 +25,7 @@ class VendingController extends AbstractController
 
         $this->repository->save();
 
-        return $this->json(['status' => 204]);
+        return $this->json(['status' => Response::HTTP_NO_CONTENT]);
     }
 
     #[Route('/vend/{product}', methods: ['POST'])]
@@ -37,7 +37,7 @@ class VendingController extends AbstractController
             $result = $machine->vend($product);
             $this->repository->save();
 
-            return $this->json(['data' => $result, 'status' => 200]);
+            return $this->json(['data' => $result, 'status' => Response::HTTP_OK]);
         } catch (\Exception $e) {
             return $this->json([
                 'status' => 'error',
@@ -59,7 +59,7 @@ class VendingController extends AbstractController
             $coinsArray[] = $coin->value();
         }
 
-        return $this->json(['returned_coins' => $coinsArray, 'status' => 200]);
+        return $this->json(['returned_coins' => $coinsArray, 'status' => Response::HTTP_OK]);
     }
 
 }
