@@ -42,7 +42,7 @@ class VendingController extends AbstractController
             return $this->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ], 400);
+            ]);
         }
     }
 
