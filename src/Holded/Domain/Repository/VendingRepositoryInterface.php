@@ -1,13 +1,14 @@
 <?php
-declare(strict_types=1);
+
+declare(strict_types = 1);
+
 namespace Holded\Domain\Repository;
 
-use Holded\Application\VendingService;
+use Holded\Domain\Models\Aggregate\VendingMachine;
 
 interface VendingRepositoryInterface
 {
-    public function vending(): VendingService;
-    public function save(): void;
-    public function load(): void;
-    public function clear(): void;
+    public function vending(): VendingMachine;
+
+    public function save(VendingMachine $vendingMachine): void;
 }

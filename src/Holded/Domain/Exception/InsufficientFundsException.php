@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Holded\Domain\Exception;
 
-/**
- * @author    Cristian Bautista <cbautista@multiestetica.com>
- * @copyright 2006-2026 Your New Self, S.L.
- */
-class InsufficientFundsException
+use DomainException;
+
+class InsufficientFundsException extends DomainException
 {
 
 }
