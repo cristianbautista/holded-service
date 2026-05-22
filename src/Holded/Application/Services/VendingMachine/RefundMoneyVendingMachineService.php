@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Holded\Application\Services\VendingMachine;
 
@@ -9,7 +9,8 @@ final readonly class RefundMoneyVendingMachineService
 {
     public function __construct(
         private VendingRepositoryInterface $vendingMachineRepository
-    ) {
+    )
+    {
     }
 
     public function execute(): float
@@ -18,7 +19,7 @@ final readonly class RefundMoneyVendingMachineService
 
         $refund = $vendingMachine->refund();
 
-        $this->vendingMachineRepository->save($vendingMachine);
+        $this->vendingMachineRepository->save(vendingMachine: $vendingMachine);
 
         return $refund->amount();
     }

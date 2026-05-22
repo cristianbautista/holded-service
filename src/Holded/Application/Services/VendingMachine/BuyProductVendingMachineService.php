@@ -19,7 +19,7 @@ final readonly class BuyProductVendingMachineService
     {
         $vendingMachine = $this->vendingMachineRepository->vending();
 
-        $vendingMachine->buyProduct(ProductId::fromString($command->productIdRaw()));
+        $vendingMachine->buyProduct(productId: ProductId::fromString($command->productIdRaw()));
 
         $this->vendingMachineRepository->save($vendingMachine);
 

@@ -16,11 +16,11 @@ final readonly class InsertCoinVendingMachineCommand
 
     public static function fromArray(array $data): self
     {
-        if (!isset($data['coin'])) {
+        if (!isset($data['data']['coin'])) {
             throw new InvalidArgumentException('The "coin" parameter is required.');
         }
 
-        return new self((float)$data['coin']);
+        return new self((float)$data['data']['coin']);
     }
 
     public function coin(): float

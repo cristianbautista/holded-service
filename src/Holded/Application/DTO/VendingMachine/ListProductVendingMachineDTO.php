@@ -5,7 +5,7 @@ namespace Holded\Application\DTO\VendingMachine;
 
 use Holded\Domain\Models\Aggregate\VendingMachine;
 
-final class ListProductVendingMachineDTO
+final readonly class ListProductVendingMachineDTO
 {
     private array $data;
 

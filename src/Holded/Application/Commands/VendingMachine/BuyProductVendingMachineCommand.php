@@ -15,11 +15,11 @@ final readonly class BuyProductVendingMachineCommand
 
     public static function fromArray(array $data): self
     {
-        if (!isset($data['product_key'])) {
+        if (!isset($data['data']['product_key'])) {
             throw new InvalidArgumentException('The "product_key" parameter is required.');
         }
 
-        return new self($data['product_key']);
+        return new self($data['data']['product_key']);
     }
 
     public function productIdRaw(): string
