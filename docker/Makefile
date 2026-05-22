@@ -17,3 +17,6 @@ down:
 
 composer-update:
 	docker-compose exec $(SERVICE) composer update
+
+composer-install:
+	docker-compose exec $(SERVICE) composer install
