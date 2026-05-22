@@ -1,25 +1,29 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Holded\Infrastructure\Http\Controllers\VendingMachine;
 
+use DomainException;
+use Holded\Application\Commands\VendingMachine\InsertCoinVendingMachineCommand;
+use Holded\Application\Services\VendingMachine\InsertCoinVendingMachineService;
+use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Holded\Application\Services\VendingMachine\InsertCoinVendingMachineService;
-use Holded\Application\Commands\VendingMachine\InsertCoinVendingMachineCommand;
+use Throwable;
 
 #[Route(
-    path: '/vending-machine/insert-coin',
+    path: 'api/vending/insert-coin',
     name: 'insert_coin_vending_machine',
     methods: ['POST']
 )]
-final class InsertCoinVendingMachineController
+final readonly class InsertCoinVendingMachineController
 {
     public function __construct(
-        private readonly InsertCoinVendingMachineService $insertCoinVendingMachineService
-    ) {
+        private InsertCoinVendingMachineService $insertCoinVendingMachineService
+    )
+    {
     }
 
     public function __invoke(Request $request): JsonResponse
@@ -29,7 +33,7 @@ final class InsertCoinVendingMachineController
             $command = InsertCoinVendingMachineCommand::fromArray($data);
 
             $this->insertCoinVendingMachineService->execute($command);
-            
+
             return new JsonResponse(
                 data: [
                     'data' => [
@@ -38,8 +42,8 @@ final class InsertCoinVendingMachineController
                 ],
                 status: Response::HTTP_OK
             );
-            
-        } catch (\InvalidArgumentException | \DomainException $e) {
+
+        } catch (InvalidArgumentException|DomainException $e) {
             return new JsonResponse(
                 data: [
                     'error' => [
@@ -48,15 +52,15 @@ final class InsertCoinVendingMachineController
                 ],
                 status: Response::HTTP_BAD_REQUEST
             );
-            
-        } catch (\Throwable $throwable) {
+
+        } catch (Throwable $throwable) {
             return new JsonResponse(
                 data: [
                     'error' => [
                         'message' => $throwable->getMessage()
                     ]
                 ],
-                status: Response::HTTP_BAD_REQUEST 
+                status: Response::HTTP_BAD_REQUEST
             );
         }
     }

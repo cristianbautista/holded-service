@@ -7,7 +7,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Holded\Application\Services\VendingMachine\RefundMoneyVendingMachineService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
 #[Route(path:'/api/vending/refund', name: 'refund_money_vending_machine', methods: ['POST'])]
 final readonly class RefundMoneyVendingMachineController
 {
@@ -15,12 +14,10 @@ final readonly class RefundMoneyVendingMachineController
         private RefundMoneyVendingMachineService $refundMoneyVendingMachineService
     ) {
     }
-
     public function __invoke(): JsonResponse
     {
         try {
             $amount = $this->refundMoneyVendingMachineService->execute();
-
             return new JsonResponse(
                 data: [
                     'data' => [

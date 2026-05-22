@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Holded\Domain\Models\Aggregate;
 
@@ -18,15 +18,16 @@ final class VendingMachine
     private function __construct(array $inventory, array $prices, Money $balance = null)
     {
         $this->inventory = $inventory;
-        $this->prices    = $prices;
-        $this->balance   = $balance ?? Money::zero();
+        $this->prices = $prices;
+        $this->balance = $balance ?? Money::zero();
     }
 
     public static function create(
         array $inventory,
         array $prices,
         Money $balance = null
-    ): VendingMachine {
+    ): VendingMachine
+    {
         return new self(
             inventory: $inventory,
             prices: $prices,
@@ -51,8 +52,7 @@ final class VendingMachine
             throw new DomainException("Product is out of stock.", 400);
         }
 
-        $price = $this->prices[$id];
-
+        $price = Money::fromPriceProduct($this->prices[$id]);
         if ($this->balance->isLessThan($price)) {
             throw new InsufficientFundsException("Insufficient funds. More money is required.", 400);
         }
@@ -67,7 +67,7 @@ final class VendingMachine
             throw new DomainException("Insufficient funds. More money is required.");
         }
         $refundedAmount = $this->balance;
-        $this->balance  = Money::zero();
+        $this->balance = Money::zero();
 
         return $refundedAmount;
     }

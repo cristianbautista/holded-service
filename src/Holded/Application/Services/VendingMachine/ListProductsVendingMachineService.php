@@ -10,7 +10,8 @@ final readonly class ListProductsVendingMachineService
 {
     public function __construct(
         private VendingRepositoryInterface $vendingRepository
-    ) {
+    )
+    {
     }
 
     public function listProducts(): array

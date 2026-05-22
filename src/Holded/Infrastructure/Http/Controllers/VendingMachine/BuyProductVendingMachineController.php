@@ -1,5 +1,4 @@
 <?php
-
 namespace Holded\Infrastructure\Http\Controllers\VendingMachine;
 
 use Holded\Application\Commands\VendingMachine\BuyProductVendingMachineCommand;

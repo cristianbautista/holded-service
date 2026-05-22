@@ -12,7 +12,7 @@ final readonly class RefundMoneyVendingMachineService
     ) {
     }
 
-    public function __invoke(): float
+    public function execute(): float
     {
         $vendingMachine = $this->vendingMachineRepository->vending();
 
