@@ -43,3 +43,55 @@ commands are detailed below:
 1. To start the project for the first time: `make build` ➡️ `make up` ➡️ `make composer-install`.
 2. For day-to-day development: `make up`.
 3. To shut down the environment when finished: `make down`.
+
+## Endpoints
+
+1. List Products Vending
+
+```bash
+   curl --location --request GET 'http://localhost:8080/api/vending/products' \
+   --header 'Content-Type: application/json' \
+   --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc'
+```
+
+2. Insert Coin to the machine
+
+```bash
+   curl --location 'http://localhost:8080/api/vending/insert-coin' \
+   --header 'Content-Type: application/json' \
+   --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
+   --data '{
+   "data":{
+   "coin": 2.00
+   }
+
+}'
+```
+
+3. Select product
+
+```bash
+   curl --location 'http://localhost:8080/api/vending/products/buy' \
+   --header 'Content-Type: application/json' \
+   --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
+   --data '{
+   "data":{
+   "product_key": "WATER"
+   }
+
+}'
+```
+
+4. Refund Coins
+
+```bash
+   curl --location 'http://localhost:8080/api/vending/refund' \
+   --header 'Content-Type: application/json' \
+   --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
+   --data '{
+   "data":{
+   "coin": 2.00
+   }
+
+}'
+```
