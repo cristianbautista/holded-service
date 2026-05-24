@@ -62,7 +62,7 @@ commands are detailed below:
    --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
    --data '{
    "data":{
-   "coin": 2.00
+   "coin": 0.20
    }
 
 }'
