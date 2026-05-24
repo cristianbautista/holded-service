@@ -1,0 +1,3 @@
+services:
+
+  Holded\Domain\Repository\VendingRepositoryInterface: '@Holded\Infrastructure\Persistence\InMemory\InMemoryVendingRepository'

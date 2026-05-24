@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Holded\Infrastructure\Repository;
+namespace Holded\Infrastructure\Persistence\Repository;
 
 use Holded\Domain\Inventory;
 use Holded\Domain\Models\Aggregate\VendingMachine;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Holded\Tests\Application\InsertCoinVendingMachineServiceTest;
+namespace Holded\Tests\Application\Services;
 
 use Holded\Application\Services\VendingMachine\ListProductsVendingMachineService;
 use Holded\Domain\Inventory;

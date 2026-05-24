@@ -82,16 +82,9 @@ commands are detailed below:
 }'
 ```
 
-4. Refund Coins
+### 4. Refund Coins
 
 ```bash
-   curl --location 'http://localhost:8080/api/vending/refund' \
-   --header 'Content-Type: application/json' \
-   --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
-   --data '{
-   "data":{
-   "coin": 2.00
-   }
-
-}'
-```
+curl --location --request POST 'http://localhost:8080/api/vending/refund' \
+--header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
+--data ''

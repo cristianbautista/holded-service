@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Holded\Tests\Application\InsertCoinVendingMachineServiceTest;
+namespace Holded\Tests\Application\Services;
 
 use DomainException;
 use Holded\Application\Commands\VendingMachine\BuyProductVendingMachineCommand;
