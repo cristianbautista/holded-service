@@ -20,3 +20,10 @@ composer-update:
 
 composer-install:
 	docker-compose exec $(SERVICE) composer install
+
+test:
+	docker compose exec $(SERVICE) bin/phpunit
+
+test-dox:
+	docker compose exec $(SERVICE) bin/phpunit --testdox
+
