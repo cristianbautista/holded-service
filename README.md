@@ -76,7 +76,7 @@ commands are detailed below:
    --header 'Cookie: PHPSESSID=dd1ec5433eab78974d1d86e98c37c9fc' \
    --data '{
    "data":{
-   "product_key": "WATER"
+   "product_key": "COKE"
    }
 
 }'

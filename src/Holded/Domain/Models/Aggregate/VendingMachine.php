@@ -47,9 +47,10 @@ final class VendingMachine
 
     public function refund(): Money
     {
-        if ($this->balance->amount() === 0.0) {
+        if ($this->balance->isLessThan(Money::zero()) || $this->balance->amount() == 0) {
             throw new DomainException("Insufficient funds. More money is required.");
         }
+
         $refundedAmount = $this->balance;
         $this->balance = Money::zero();
 
