@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Holded\Infrastructure\Repository;
 
+use Holded\Domain\Inventory;
 use Holded\Domain\Models\Aggregate\VendingMachine;
 use Holded\Domain\Models\ProductType;
 use Holded\Domain\Models\ValueObject\Money;
+use Holded\Domain\Models\ValueObject\ProductId;
+use Holded\Domain\Product;
 use Holded\Domain\Repository\VendingRepositoryInterface;
-use LogicException;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class VendingRepository implements VendingRepositoryInterface
@@ -20,58 +21,60 @@ final class VendingRepository implements VendingRepositoryInterface
     private const PRICE_CHIPS = 0.85;
 
     public function __construct(
-        private readonly RequestStack $requestStack
+        private readonly SessionInterface $session
     )
     {
     }
 
-    public function vending(): VendingMachine
+    public function findActiveMachine(): VendingMachine
     {
-        $session = $this->session();
+        if (!$this->session->has(self::KEY_VENDING_MACHINE)) {
+            $initialProducts = [
+                Product::create(ProductId::fromString(ProductType::COKE->value), Money::fromPriceProduct(self::PRICE_COKE), 5),
+                Product::create(ProductId::fromString(ProductType::WATER->value), Money::fromPriceProduct(self::PRICE_WATER), 10),
+                Product::create(ProductId::fromString(ProductType::CHIPS->value), Money::fromPriceProduct(self::PRICE_CHIPS), 0),
+            ];
 
-        if (!$session->has(self::KEY_VENDING_MACHINE)) {
             $vendingInit = VendingMachine::create(
-                [
-                    ProductType::COKE->value => 5,
-                    ProductType::WATER->value => 10,
-                    ProductType::CHIPS->value => 0,
-                ],
-                [
-                    ProductType::COKE->value => self::PRICE_COKE,
-                    ProductType::WATER->value => self::PRICE_WATER,
-                    ProductType::CHIPS->value => self::PRICE_CHIPS,
-                ],
+                Inventory::create($initialProducts),
                 Money::zero()
             );
+
             $this->save($vendingInit);
         }
 
-        $data = $session->get(self::KEY_VENDING_MACHINE);
+        $data = $this->session->get(self::KEY_VENDING_MACHINE);
+        $products = [];
 
-        return VendingMachine::create(
-            $data['inventory'],
-            $data['prices'],
-            $data['balance']
-        );
-    }
-
-    private function session(): SessionInterface
-    {
-        $currentRequest = $this->requestStack->getCurrentRequest();
-
-        if (null === $currentRequest) {
-            throw new LogicException("Session cannot be accessed outside the context of an HTTP request");
+        foreach ($data['inventory'] as $item) {
+            $products[] = Product::create(
+                ProductId::fromString($item['id']),
+                Money::fromPriceProduct($item['price']),
+                $item['stock']
+            );
         }
 
-        return $currentRequest->getSession();
+        return VendingMachine::create(
+            Inventory::create($products),
+            Money::fromPriceProduct((float)$data['balance'])
+        );
     }
 
     public function save(VendingMachine $vendingMachine): void
     {
-        $this->session()->set(self::KEY_VENDING_MACHINE, [
-            'inventory' => $vendingMachine->inventory(),
-            'prices' => $vendingMachine->prices(),
-            'balance' => $vendingMachine->balance(),
+        $inventoryData = [];
+        foreach ($vendingMachine->inventory()->all() as $product) {
+            $inventoryData[] = [
+                'id' => $product->id()->value,
+                'price' => $product->price()->amount(),
+                'stock' => $product->stock(),
+            ];
+        }
+
+        $this->session->set(self::KEY_VENDING_MACHINE, [
+            'inventory' => $inventoryData,
+            'balance' => $vendingMachine->balance()->amount(),
         ]);
+
     }
 }

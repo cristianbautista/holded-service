@@ -8,7 +8,7 @@ use InvalidArgumentException;
 final readonly class BuyProductVendingMachineCommand
 {
     public function __construct(
-        private string $productIdRaw
+        public string $productIdRaw
     )
     {
     }
@@ -20,10 +20,5 @@ final readonly class BuyProductVendingMachineCommand
         }
 
         return new self($data['data']['product_key']);
-    }
-
-    public function productIdRaw(): string
-    {
-        return $this->productIdRaw;
     }
 }

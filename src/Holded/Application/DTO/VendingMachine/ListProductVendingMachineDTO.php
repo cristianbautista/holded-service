@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Holded\Application\DTO\VendingMachine;
@@ -17,11 +18,12 @@ final readonly class ListProductVendingMachineDTO
     public static function fromMachine(VendingMachine $machine): self
     {
         $data = [];
-        foreach ($machine->inventory() as $id => $stock) {
+        
+        foreach ($machine->inventory()->all() as $product) {
             $data[] = [
-                'id' => $id,
-                'price' => $machine->prices()[$id],
-                'stock' => $stock,
+                'id' => $product->id()->value,
+                'price' => $product->price()->amount(),
+                'stock' => $product->stock(),
             ];
         }
 

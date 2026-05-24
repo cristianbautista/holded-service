@@ -15,7 +15,7 @@ final readonly class RefundMoneyVendingMachineService
 
     public function execute(): float
     {
-        $vendingMachine = $this->vendingMachineRepository->vending();
+        $vendingMachine = $this->vendingMachineRepository->findActiveMachine();
 
         $refund = $vendingMachine->refund();
 

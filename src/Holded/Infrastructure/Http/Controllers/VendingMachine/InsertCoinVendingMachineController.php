@@ -7,6 +7,7 @@ use DomainException;
 use Holded\Application\Commands\VendingMachine\InsertCoinVendingMachineCommand;
 use Holded\Application\Services\VendingMachine\InsertCoinVendingMachineService;
 use InvalidArgumentException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,10 @@ use Throwable;
     name: 'insert_coin_vending_machine',
     methods: ['POST']
 )]
-final readonly class InsertCoinVendingMachineController
+final class InsertCoinVendingMachineController extends AbstractController
 {
     public function __construct(
-        private InsertCoinVendingMachineService $insertCoinVendingMachineService
+        private readonly InsertCoinVendingMachineService $insertCoinVendingMachineService
     )
     {
     }
@@ -34,7 +35,7 @@ final readonly class InsertCoinVendingMachineController
 
             $this->insertCoinVendingMachineService->execute($command);
 
-            return new JsonResponse(
+            return $this->json(
                 data: [
                     'data' => [
                         'message' => 'Coin inserted successfully'
@@ -44,7 +45,7 @@ final readonly class InsertCoinVendingMachineController
             );
 
         } catch (InvalidArgumentException|DomainException $e) {
-            return new JsonResponse(
+            return $this->json(
                 data: [
                     'error' => [
                         'message' => $e->getMessage()
@@ -54,7 +55,7 @@ final readonly class InsertCoinVendingMachineController
             );
 
         } catch (Throwable $throwable) {
-            return new JsonResponse(
+            return $this->json(
                 data: [
                     'error' => [
                         'message' => $throwable->getMessage()

@@ -17,7 +17,7 @@ final readonly class InsertCoinVendingMachineService
 
     public function execute(InsertCoinVendingMachineCommand $command): void
     {
-        $vendingMachine = $this->vendingMachineRepository->vending();
+        $vendingMachine = $this->vendingMachineRepository->findActiveMachine();
 
         $vendingMachine->insertCoin(Money::fromCoin(coin: $command->coin()));
 

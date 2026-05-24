@@ -1,19 +1,23 @@
 <?php
+
 namespace Holded\Infrastructure\Http\Controllers\VendingMachine;
 
 use Holded\Application\Commands\VendingMachine\BuyProductVendingMachineCommand;
-use Holded\Domain\Exception\InsufficientFundsException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
 use Holded\Application\Services\VendingMachine\BuyProductVendingMachineService;
+use Holded\Domain\Exception\InsufficientFundsException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 #[Route('/api/vending/products/buy', name: 'vending_buy_product', methods: ['POST'])]
-final readonly class BuyProductVendingMachineController
+final class BuyProductVendingMachineController extends AbstractController
 {
     public function __construct(
-        private BuyProductVendingMachineService $buyProductVendingMachineService
-    ) {
+        private readonly BuyProductVendingMachineService $buyProductVendingMachineService
+    )
+    {
     }
 
     public function __invoke(Request $request): JsonResponse
@@ -24,7 +28,7 @@ final readonly class BuyProductVendingMachineController
             $command = BuyProductVendingMachineCommand::fromArray($data);
             $this->buyProductVendingMachineService->execute($command);
 
-            return new JsonResponse(
+            return $this->json(
                 data: [
                     'data' => [
                         'message' => 'Product bought successfully'
@@ -33,7 +37,7 @@ final readonly class BuyProductVendingMachineController
                 status: JsonResponse::HTTP_OK
             );
         } catch (InsufficientFundsException $e) {
-            return new JsonResponse(
+            return $this->json(
                 data: [
                     'error' => [
                         'message' => $e->getMessage()
@@ -41,8 +45,8 @@ final readonly class BuyProductVendingMachineController
                 ],
                 status: JsonResponse::HTTP_BAD_REQUEST
             );
-        } catch (\Throwable $throwable) {
-            return new JsonResponse(
+        } catch (Throwable $throwable) {
+            return $this->json(
                 data: [
                     'error' => [
                         'message' => $throwable->getMessage()

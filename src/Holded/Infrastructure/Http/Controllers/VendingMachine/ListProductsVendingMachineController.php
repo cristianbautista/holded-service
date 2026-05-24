@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Holded\Infrastructure\Http\Controllers\VendingMachine;
 
 use Holded\Application\Services\VendingMachine\ListProductsVendingMachineService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,10 +15,10 @@ use Throwable;
     name: 'list_products_vending_machine',
     methods: ['GET']
 )]
-final readonly class ListProductsVendingMachineController
+final  class ListProductsVendingMachineController extends AbstractController
 {
     public function __construct(
-        private ListProductsVendingMachineService $listProductsVendingMachineService
+        private readonly ListProductsVendingMachineService $listProductsVendingMachineService
     )
     {
     }
@@ -27,14 +28,14 @@ final readonly class ListProductsVendingMachineController
         try {
             $data = $this->listProductsVendingMachineService->listProducts();
 
-            return new JsonResponse([
+            return $this->json([
                 'data' => [
                     'products' => $data
                 ]
             ]);
 
         } catch (Throwable $throwable) {
-            return new JsonResponse(
+            return $this->json(
                 data: [
                     'error' => [
                         'message' => $throwable->getMessage()

@@ -6,59 +6,43 @@ namespace Holded\Domain\Models\Aggregate;
 
 use DomainException;
 use Holded\Domain\Exception\InsufficientFundsException;
+use Holded\Domain\Inventory;
 use Holded\Domain\Models\ValueObject\Money;
-use Holded\Domain\Models\ValueObject\ProductId;
+use Holded\Domain\Product;
 
 final class VendingMachine
 {
-    private array $inventory;
-    private array $prices;
+    private Inventory $inventory;
     private Money $balance;
 
-    private function __construct(array $inventory, array $prices, Money $balance = null)
+    private function __construct(Inventory $inventory, Money $balance = null)
     {
         $this->inventory = $inventory;
-        $this->prices = $prices;
         $this->balance = $balance ?? Money::zero();
     }
 
-    public static function create(
-        array $inventory,
-        array $prices,
-        Money $balance = null
-    ): VendingMachine
+    public static function create(Inventory $inventory, Money $balance = null): VendingMachine
     {
-        return new self(
-            inventory: $inventory,
-            prices: $prices,
-            balance: $balance
-        );
+        return new self(inventory: $inventory, balance: $balance);
     }
-
 
     public function insertCoin(Money $coin): void
     {
         $this->balance = $this->balance->add($coin);
     }
 
-    public function buyProduct(ProductId $productId): void
+    public function buyProduct(Product $product): void
     {
-        $id = $productId->value();
-
-        if (!isset($this->inventory[$id])) {
-            throw new DomainException("Product does not exist.", 404);
-        }
-        if ($this->inventory[$id] <= 0) {
+        if (!$product->hasStock()) {
             throw new DomainException("Product is out of stock.", 400);
         }
 
-        $price = Money::fromPriceProduct($this->prices[$id]);
-        if ($this->balance->isLessThan($price)) {
+        if ($this->balance->isLessThan($product->price())) {
             throw new InsufficientFundsException("Insufficient funds. More money is required.", 400);
         }
 
-        $this->inventory[$id]--;
-        $this->balance = $this->balance->subtract($price);
+        $product->reduceStock();
+        $this->balance = $this->balance->subtract($product->price());
     }
 
     public function refund(): Money
@@ -72,14 +56,9 @@ final class VendingMachine
         return $refundedAmount;
     }
 
-    public function inventory(): array
+    public function inventory(): Inventory
     {
         return $this->inventory;
-    }
-
-    public function prices(): array
-    {
-        return $this->prices;
     }
 
     public function balance(): Money

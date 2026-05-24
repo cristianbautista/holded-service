@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Holded\Domain\Models\ValueObject;
 
 use InvalidArgumentException;
 
-final class ProductId
+final readonly class ProductId
 {
-    private string $value;
+    public string $value;
 
     private function __construct(string $value)
     {
@@ -22,11 +22,5 @@ final class ProductId
     public static function fromString(string $value): ProductId
     {
         return new self($value);
-    }
-
-
-    public function value(): string
-    {
-        return $this->value;
     }
 }

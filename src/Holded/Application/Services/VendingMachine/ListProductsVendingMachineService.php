@@ -16,7 +16,7 @@ final readonly class ListProductsVendingMachineService
 
     public function listProducts(): array
     {
-        $machine = $this->vendingRepository->vending();
+        $machine = $this->vendingRepository->findActiveMachine();
 
         return ListProductVendingMachineDTO::fromMachine(machine: $machine)
             ->toArray();
