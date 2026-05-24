@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\ValueObject;
+namespace Holded\Tests\Domain\ValueObject;
 
 use Holded\Domain\Models\ValueObject\Money;
 use InvalidArgumentException;

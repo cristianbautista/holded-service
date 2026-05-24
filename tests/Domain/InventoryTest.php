@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Domain;
+namespace Holded\Tests\Domain;
 
 use Holded\Domain\Inventory;
 use Holded\Domain\Models\ValueObject\Money;
